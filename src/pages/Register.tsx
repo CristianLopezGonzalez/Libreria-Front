@@ -72,7 +72,7 @@ const Register = () => {
               CREA TU CUENTA
             </h2>
             <p className="mt-2 text-sm text-slate-500">
-              Completa tus datos para empezar.
+              Completa tus datos para empezar
             </p>
 
             {success && (
@@ -125,7 +125,7 @@ const Register = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="mt-6 w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-6 w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isLoading ? "Registrando..." : "Crear cuenta"}
             </button>
