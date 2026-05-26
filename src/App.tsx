@@ -1,31 +1,44 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import Login from "./pages/Login"
-import Home from "./pages/Home"
-import { PrivateRoute } from "./routes/PrivateRoutes"
-import Register from "./pages/Register"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import { PrivateRoute, PublicRoute } from "./routes/PrivateRoutes";
+import Register from "./pages/Register";
 
 function App() {
-    return (
-        <BrowserRouter>
-            <Routes>
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* pública */}
 
-                {/* pública */}
-                <Route path="/" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+        <Route
+          path="/"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
 
-                {/* protegida */}
-                <Route
-                    path="/home"
-                    element={
-                        <PrivateRoute>
-                            <Home />
-                        </PrivateRoute>
-                    }
-                />
-
-            </Routes>
-        </BrowserRouter>
-    )
+        {/* protegida */}
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

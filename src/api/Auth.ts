@@ -41,7 +41,7 @@ export const login = async (loginData: LoginData): Promise<AuthResponse> => {
     } catch (error) {
         if (axios.isAxiosError(error)) {
             throw new Error(
-                error.response?.data?.message || "Login failed"
+                error.response?.data?.message || "Login failed", { cause: error }
             )
         }
 
@@ -63,9 +63,7 @@ export const register = async (registerData: RegisterData): Promise<AuthResponse
 
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            throw new Error(
-                error.response?.data?.message || "Register failed"
-            )
+            throw new Error(error.response?.data?.message || "Register failed", { cause: error })
         }
 
         throw error
