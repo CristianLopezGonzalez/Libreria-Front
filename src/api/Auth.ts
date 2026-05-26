@@ -1,6 +1,7 @@
 import axios from "axios"
 import { noAuth } from "./Api"
 
+
 // TYPES
 export interface LoginData {
     email: string

@@ -10,6 +10,15 @@ const Login = () => {
 
     const navigate = useNavigate()
 
+    const handleSeePassword = () => {
+        const passwordInput = document.getElementById("password") as HTMLInputElement
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text"
+        } else {
+            passwordInput.type = "password"
+        }
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
@@ -73,14 +82,26 @@ const Login = () => {
 
                             <label className="block text-sm font-medium text-slate-700">
                                 Contrasena
-                                <input
-                                    type="password"
-                                    placeholder="Tu contrasena"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 shadow-sm outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
-                                />
+                                <div className="relative">
+                                    <input
+                                        id="password"
+                                        type="password"
+                                        placeholder="Tu contrasena"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 shadow-sm outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={handleSeePassword}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-slate-500 hover:text-slate-700"
+                                    >
+                                        Ver
+                                    </button>
+                                </div>
                             </label>
+
+
                         </div>
 
                         <button
@@ -107,7 +128,7 @@ const Login = () => {
                     <div className="absolute inset-0 bg-slate-100">
                         <div className="flex h-full w-full items-center justify-center border-l border-slate-200 opacity-90" style={{ backgroundImage: "url('/banner-login.avif')", backgroundSize: "cover", backgroundPosition: "center" }}>
                             <p className="text-sm font-medium uppercase tracking-[0.2em] text-slate-400">
-                                
+
                             </p>
                         </div>
                     </div>
