@@ -1,9 +1,10 @@
 import { Navigate } from "react-router-dom";
-import { isAuthenticated } from "../utils/Auth";
+import { useAuth } from "../context/AuthContext";
 import type { JSX } from "react/jsx-dev-runtime";
 
 export const PrivateRoute = ({ children }: { children: JSX.Element }) => {
-  if (!isAuthenticated()) {
+  const auth = useAuth()
+  if (!auth.isAuthenticated) {
     return <Navigate to="/" replace />;
   }
 
@@ -11,9 +12,10 @@ export const PrivateRoute = ({ children }: { children: JSX.Element }) => {
 };
 
 export const PublicRoute = ({ children }: { children: JSX.Element }) => {
-    if (isAuthenticated()) {
-        return <Navigate to="/home" replace />
-    }
+  const auth = useAuth()
+  if (auth.isAuthenticated) {
+    return <Navigate to="/home" replace />
+  }
 
-    return children
+  return children
 }

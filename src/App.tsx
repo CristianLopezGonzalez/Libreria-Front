@@ -1,12 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import { PrivateRoute, PublicRoute } from "./routes/PrivateRoutes";
 import Register from "./pages/Register";
+import Library from "./pages/Library";
+import Profile from "./pages/Profile";
+import CreateBook from "./pages/CreateBook";
 
 function App() {
   return (
-    <BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
       <Routes>
         {/* pública */}
 
@@ -36,8 +41,33 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="/library"
+          element={
+            <PrivateRoute>
+              <Library />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/create-book"
+          element={
+            <PrivateRoute>
+              <CreateBook />
+            </PrivateRoute>
+          }
+        />
       </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

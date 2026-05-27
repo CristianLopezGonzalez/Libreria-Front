@@ -1,77 +1,106 @@
 import axios from "axios"
-import { noAuth } from "./Api"
+import { noAuth, needAuth } from "./Api"
+import type { ApiResponse, AuthResponse, AuthUser, RefreshTokenResponse } from "../types/apiTypes"
 
-
-// TYPES
-export interface LoginData {
-    email: string
-    password: string
-}
-
-export interface RegisterData {
-    email: string
-    password: string
-    nick: string
-}
-
-export interface AuthUser {
-    id: string
-    email: string
-    nick: string
-    role: string
-}
-
-export interface AuthResponse {
-    user: AuthUser
-    token: string
-    message?: string
-}
-
-// LOGIN
-export const login = async (loginData: LoginData): Promise<AuthResponse> => {
+// ─── Login ───
+export const login = async (email: string, password: string): Promise<AuthResponse> => {
     try {
-        const { data: res } = await noAuth.post<AuthResponse>(
+        const { data: res } = await noAuth.post<ApiResponse<AuthResponse>>(
             "/auth/login",
-            loginData
+            { email, password }
         )
 
-        localStorage.setItem("token", res.token)
+        // Extraer del wrapper { status, message, data }
+        localStorage.setItem("token", res.data.token)
 
-        return res
+        return res.data
 
     } catch (error) {
         if (axios.isAxiosError(error)) {
             throw new Error(
-                error.response?.data?.message || "Login failed", { cause: error }
+                error.response?.data?.message || "Login failed",
+                { cause: error }
             )
         }
-
         throw error
     }
 }
 
-// REGISTER
-export const register = async (registerData: RegisterData): Promise<AuthResponse> => {
+// ─── Register ───
+export const register = async (
+    email: string,
+    password: string,
+    nick: string
+): Promise<AuthResponse> => {
     try {
-        const { data: res } = await noAuth.post<AuthResponse>(
+        const { data: res } = await noAuth.post<ApiResponse<AuthResponse>>(
             "/auth/register",
-            registerData
+            { email, password, nick }
         )
 
-        localStorage.setItem("token", res.token)
+        localStorage.setItem("token", res.data.token)
 
-        return res
+        return res.data
 
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            throw new Error(error.response?.data?.message || "Register failed", { cause: error })
+            throw new Error(
+                error.response?.data?.message || "Register failed",
+                { cause: error }
+            )
         }
-
         throw error
     }
 }
 
-// LOGOUT
-export const logout = () => {
-    localStorage.removeItem("token")
+// ─── Get Profile ───
+export const getProfile = async (): Promise<AuthUser> => {
+    try {
+        const { data: res } = await needAuth.get<ApiResponse<AuthUser>>(
+            "/auth/profile"
+        )
+        return res.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw new Error(
+                error.response?.data?.message || "Failed to get profile",
+                { cause: error }
+            )
+        }
+        throw error
+    }
+}
+
+// ─── Refresh Token ───
+export const refreshToken = async (): Promise<string> => {
+    try {
+        const { data: res } = await noAuth.post<ApiResponse<RefreshTokenResponse>>(
+            "/auth/refresh-token"
+        )
+
+        const newToken = res.data.token
+        localStorage.setItem("token", newToken)
+        return newToken
+
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw new Error(
+                error.response?.data?.message || "Token refresh failed",
+                { cause: error }
+            )
+        }
+        throw error
+    }
+}
+
+// ─── Logout ───
+export const logout = async (): Promise<void> => {
+    try {
+        // Llamar al backend para invalidar refresh tokens en el servidor
+        await needAuth.post("/auth/logout")
+    } catch {
+        // Incluso si el backend falla, limpiar localmente
+    } finally {
+        localStorage.removeItem("token")
+    }
 }
